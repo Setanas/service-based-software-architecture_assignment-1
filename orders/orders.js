@@ -10,7 +10,7 @@ const Order = mongoose.model("Order");
 app.use(bodyParser.json());
 
 mongoose.connect(
-  "mongodb+srv://MarcD:C3fiUxCkyuy8XJRj@cluster0-2cdlr.mongodb.net/orders?retryWrites=true&w=majority",
+  "mongodb+srv://MarcD:C3fiUxCkyuy8XJRj@cluster0-2cdlr.mongodb.net/orders?retryWrites=true&w=majority",{useNewUrlParser: true, useUnifiedTopology: true},
   () => {
     console.log("db connected");
   }
