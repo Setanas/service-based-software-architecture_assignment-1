@@ -132,7 +132,7 @@ app.get("/order/:id", (req, res) => {
     .then((order) => {
       if (order) {
         axios.get("http://localhost:" + config.userPort + "/user/" + order.userId).then((response) => {
-          var orderObject = { userId: order.userId, userName: response.data.name, userWallet: response.data.wallet, ticketId: order.ticketId, ticketName: "", ticketPrice: "" }
+          var orderObject = { userId: order.userId, userName: response.data.name, userWallet: response.data.wallet, ticketId: order.ticketId, ticketName: "", ticketPrice: "", paid: order.paid }
           axios.get("http://localhost:" + config.ticketPort + "/ticket/" + order.ticketId).then((response) => {
             orderObject.ticketName = response.data.name
             orderObject.ticketPrice = response.data.price
