@@ -5,6 +5,10 @@ mongoose.model("Ticket", {
         type: String,
         require: true
     },
+    stock: {
+        type: Number,
+        require: true
+    },
     price: {
         type: Number,
         require: false

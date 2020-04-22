@@ -9,7 +9,7 @@ const Ticket = mongoose.model("Ticket");
 app.use(bodyParser.json());
 
 mongoose.connect(
-  "mongodb+srv://MarcD:C3fiUxCkyuy8XJRj@cluster0-2cdlr.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true},
+  "mongodb+srv://first_user:password1998@microservices-f5nmb.mongodb.net/tickets?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true},
   () => {
     console.log("db connected");
   }
@@ -23,6 +23,7 @@ app.post("/ticket", (req, res) => {
   var newTicket = {
     name: req.body.name,
     price: req.body.price,
+    stock: req.body.stock
   };
 
   var ticket = new Ticket(newTicket);
@@ -72,6 +73,23 @@ app.delete("/ticket/:id", (req, res) => {
     });
 });
 
-app.listen(4545, () => {
+app.patch("/ticket/:id", (req, res) => {
+  Ticket.findById(req.params.id).then((ticket) => {
+    if (ticket) {
+      ticket.stock -= 1;
+      ticket.save();
+      res.send("Ticket stock updated");
+    } else {
+      res.sendStatus(404);
+    }
+  }).catch((err) => {
+    if (err) {
+      res.sendStatus(404);
+      throw err;
+    }
+  });
+})
+
+app.listen(2222, () => {
   console.log("server running");
 });
