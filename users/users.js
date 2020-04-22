@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const config = require('../config.json');
 
 app.use(bodyParser.json())
 
@@ -83,6 +84,6 @@ app.patch("/user/:id", (req, res) => {
   });
 })
 
-app.listen(3333, () => {
-  console.log("running users");
+app.listen(Number(config.userPort), () => {
+  console.log("server for Users running");
 });

@@ -2,7 +2,8 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const axios = require("axios")
+const axios = require("axios");
+const config = require('../config.json');
 
 require("./Order");
 const Order = mongoose.model("Order");
@@ -40,7 +41,7 @@ function postTicket(req, ticket) {
 }
 
 app.post("/order", (req, res) => {
-  axios.get("http://localhost:2222/ticket/" + req.body.ticketId)
+  axios.get("http://localhost:" + config.ticketPort + "/ticket/" + req.body.ticketId)
     .then(postTicket.bind(null, req))
     .catch((err) => {
       if (err) throw err;
@@ -54,14 +55,14 @@ function payTicket(document, res, userData, ticket) {
     ticket.data.stock > 0 &&
     document.paid == false) {
     document.paid = true;
-    axios.patch("http://localhost:2222/ticket/" + document.ticketId)
+    axios.patch("http://localhost:" + config.ticketPort + "/ticket/" + document.ticketId)
     .catch((err) => {
       if (err) {
         res.sendStatus(404);
         throw err;
       }
     });
-    axios.patch("http://localhost:3333/user/" + document.userId)
+    axios.patch("http://localhost:" + config.userPort + "/user/" + document.userId)
     .catch((err) => {
       if (err) {
         res.sendStatus(404);
@@ -77,7 +78,7 @@ function payTicket(document, res, userData, ticket) {
 
 function getUser(document, res, user) {
   if (user) {
-    axios.get("http://localhost:2222/ticket/" + document.ticketId)
+    axios.get("http://localhost:" + config.ticketPort + "/ticket/" + document.ticketId)
       .then(payTicket.bind(null, document, res, user.data))
       .catch(err => {
         if (err) {
@@ -93,7 +94,7 @@ function getUser(document, res, user) {
 app.patch("/order/:id", (req, res) => {
   Order.findById(req.params.id).then((document) => {
     if (document) {
-      axios.get("http://localhost:3333/user/" + document.userId)
+      axios.get("http://localhost:" + config.userPort + "/user/" + document.userId)
         .then(getUser.bind(null, document, res))
         .catch((err) => {
           if (err) {
@@ -130,10 +131,9 @@ app.get("/order/:id", (req, res) => {
   Order.findById(req.params.id)
     .then((order) => {
       if (order) {
-        axios.get("http://localhost:3333/user/" + order.userId).then((response) => {
-          console.log()
+        axios.get("http://localhost:" + config.userPort + "/user/" + order.userId).then((response) => {
           var orderObject = { userName: response.data.name, ticketName: "" }
-          axios.get("http://localhost:2222/ticket/" + order.ticketId).then((response) => {
+          axios.get("http://localhost:" + config.ticketPort + "/ticket/" + order.ticketId).then((response) => {
             orderObject.ticketName = response.data.name
             res.json(orderObject);
           })
@@ -160,8 +160,8 @@ app.delete("/order/:id", (req, res) => {
     });
 });
 
-app.listen(4444, () => {
-  console.log("server running");
+app.listen(Number(config.orderPort), () => {
+  console.log("server for Orders running");
 });
 
 //5e9f38f300cbd7a6f397683c

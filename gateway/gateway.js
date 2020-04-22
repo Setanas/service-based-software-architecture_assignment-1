@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const axios = require("axios");
+const config = require('../config.json');
 
 app.use(bodyParser.json());
 
@@ -15,7 +16,7 @@ app.post("/order", (req, res) => {
     paid: req.body.paid,
   };
   axios
-    .post("http://localhost:4444/order", newOrder)
+    .post("http://localhost:" + config.orderPort + "/order", newOrder)
     .then((orders) => {
       res.send(orders.data);
     })
@@ -26,7 +27,7 @@ app.post("/order", (req, res) => {
 
 app.get("/orders", (req, res) => {
   axios
-    .get("http://localhost:4444/orders")
+    .get("http://localhost:" + config.orderPort + "/orders")
     .then((orders) => {
       res.send(orders.data);
     })
@@ -37,7 +38,7 @@ app.get("/orders", (req, res) => {
 
 app.get("/order/:id", (req, res) => {
   axios
-    .get("http://localhost:4444/order/" + req.params.id)
+    .get("http://localhost:" + config.orderPort + "/order/" + req.params.id)
     .then((orders) => {
       res.send(orders.data);
     })
@@ -48,7 +49,7 @@ app.get("/order/:id", (req, res) => {
 
 app.delete("/order/:id", (req, res) => {
   axios
-    .delete("http://localhost:4444/order/" + req.params.id)
+    .delete("http://localhost:" + config.orderPort + "/order/" + req.params.id)
     .then((orders) => {
       res.send(orders.data);
     })
@@ -59,7 +60,7 @@ app.delete("/order/:id", (req, res) => {
 
 app.patch("/order/:id", (req, res) => {
   axios
-    .patch("http://localhost:4444/order/" + req.params.id, req.body)
+    .patch("http://localhost:" + config.orderPort + "/order/" + req.params.id, req.body)
     .then((orders) => {
       res.send(orders.data);
     })
@@ -79,7 +80,7 @@ app.post("/user", (req, res) => {
     wallet: req.body.wallet,
   };
   axios
-    .post("http://localhost:3333/user", newUser)
+    .post("http://localhost:" + config.userPort + "/user", newUser)
     .then((users) => {
       res.send(users.data);
     })
@@ -90,7 +91,7 @@ app.post("/user", (req, res) => {
 
 app.get("/users", (req, res) => {
   axios
-    .get("http://localhost:3333/users")
+    .get("http://localhost:" + config.userPort + "/users")
     .then((users) => {
       res.send(users.data);
     })
@@ -101,7 +102,7 @@ app.get("/users", (req, res) => {
 
 app.get("/user/:id", (req, res) => {
   axios
-    .get("http://localhost:3333/user/" + req.params.id)
+    .get("http://localhost:" + config.userPort + "/user/" + req.params.id)
     .then((users) => {
       res.send(users.data);
     })
@@ -112,7 +113,7 @@ app.get("/user/:id", (req, res) => {
 
 app.delete("/user/:id", (req, res) => {
   axios
-    .delete("http://localhost:3333/user/" + req.params.id)
+    .delete("http://localhost:" + config.userPort + "/user/" + req.params.id)
     .then((users) => {
       res.send(users.data);
     })
@@ -123,7 +124,7 @@ app.delete("/user/:id", (req, res) => {
 
 app.patch("/user/:id", (req, res) => {
   axios
-    .patch("http://localhost:3333/user/" + req.params.id, req.body)
+    .patch("http://localhost:" + config.userPort + "/user/" + req.params.id, req.body)
     .then((users) => {
       res.send(users.data);
     })
@@ -141,7 +142,7 @@ app.post("/ticket", (req, res) => {
     stock: req.body.stock,
   };
   axios
-    .post("http://localhost:2222/ticket", newTicket)
+    .post("http://localhost:" + config.ticketPort + "/ticket", newTicket)
     .then((tickets) => {
       res.send(tickets.data);
     })
@@ -152,7 +153,7 @@ app.post("/ticket", (req, res) => {
 
 app.get("/tickets", (req, res) => {
   axios
-    .get("http://localhost:2222/tickets")
+    .get("http://localhost:" + config.ticketPort + "/tickets")
     .then((tickets) => {
       res.send(tickets.data);
     })
@@ -163,7 +164,7 @@ app.get("/tickets", (req, res) => {
 
 app.get("/ticket/:id", (req, res) => {
   axios
-    .get("http://localhost:2222/ticket/" + req.params.id)
+    .get("http://localhost:" + config.ticketPort + "/ticket/" + req.params.id)
     .then((tickets) => {
       res.send(tickets.data);
     })
@@ -174,7 +175,7 @@ app.get("/ticket/:id", (req, res) => {
 
 app.delete("/ticket/:id", (req, res) => {
   axios
-    .delete("http://localhost:2222/ticket/" + req.params.id)
+    .delete("http://localhost:" + config.ticketPort + "/ticket/" + req.params.id)
     .then((tickets) => {
       res.send(tickets.data);
     })
@@ -185,7 +186,7 @@ app.delete("/ticket/:id", (req, res) => {
 
 app.patch("/ticket/:id", (req, res) => {
   axios
-    .patch("http://localhost:2222/ticket/" + req.params.id, req.body)
+    .patch("http://localhost:" + config.ticketPort + "/ticket/" + req.params.id, req.body)
     .then((tickets) => {
       res.send(tickets.data);
     })
@@ -194,6 +195,6 @@ app.patch("/ticket/:id", (req, res) => {
     });
 });
 
-app.listen(1111, () => {
-  console.log("server running");
+app.listen(Number(config.gatewayPort), () => {
+  console.log("server for Gateway running");
 });

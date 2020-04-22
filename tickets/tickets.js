@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+const config = require('../config.json');
 
 require("./Ticket");
 const Ticket = mongoose.model("Ticket");
@@ -90,6 +91,6 @@ app.patch("/ticket/:id", (req, res) => {
   });
 })
 
-app.listen(2222, () => {
-  console.log("server running");
+app.listen(Number(config.ticketPort), () => {
+  console.log("server for Tickets running");
 });
