@@ -9,7 +9,7 @@ const Ticket = mongoose.model("Ticket");
 app.use(bodyParser.json());
 
 mongoose.connect(
-  "mongodb+srv://MarcD:UDoYX5HUundpJXtm@cluster0-2cdlr.mongodb.net/test?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true},
+  "mongodb+srv://MarcD:UDoYX5HUundpJXtm@cluster0-2cdlr.mongodb.net/tickets?retryWrites=true&w=majority", {useNewUrlParser: true, useUnifiedTopology: true},
   () => {
     console.log("db connected");
   }
@@ -42,7 +42,6 @@ app.post("/ticket", (req, res) => {
 app.get("/tickets", (req, res) => {
   Ticket.find()
     .then((tickets) => {
-      console.log(res.json(tickets))
       res.json(tickets);
     })
     .catch((err) => {

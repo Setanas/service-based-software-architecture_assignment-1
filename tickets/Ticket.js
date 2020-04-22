@@ -11,6 +11,6 @@ mongoose.model("Ticket", {
     },
     price: {
         type: Number,
-        require: false
+        require: true
     }
 });

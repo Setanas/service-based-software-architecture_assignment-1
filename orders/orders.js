@@ -10,7 +10,7 @@ const Order = mongoose.model("Order");
 app.use(bodyParser.json());
 
 mongoose.connect(
-  "mongodb+srv://MarcD:UDoYX5HUundpJXtm@cluster0-2cdlr.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true },
+  "mongodb+srv://MarcD:UDoYX5HUundpJXtm@cluster0-2cdlr.mongodb.net/orders?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true },
   () => {
     console.log("db connected");
   }
@@ -113,8 +113,6 @@ app.patch("/order/:id", (req, res) => {
 })
 
 
-
-
 app.get("/orders", (req, res) => {
   Order.find()
     .then((orders) => {
@@ -165,3 +163,6 @@ app.delete("/order/:id", (req, res) => {
 app.listen(4444, () => {
   console.log("server running");
 });
+
+//5e9f38f300cbd7a6f397683c
+//5e9f36ee0483f4a5071812eb
