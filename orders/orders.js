@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 
 function postTicket(req, ticket) {
   if (ticket.data.stock == 0) {
-    res.status(404).send("No more ticket available");
+    res.status(403).send("No more ticket available");
   } else {
     var newOrder = {
       userId: req.body.userId,
@@ -35,7 +35,10 @@ function postTicket(req, ticket) {
     order.save()
       .then(() => { })
       .catch((err) => {
-        throw err;
+        if (err) {
+          res.status(403).send("Could not save new order");
+          throw err;
+        }
       });
   }
 }
@@ -44,7 +47,10 @@ app.post("/order", (req, res) => {
   axios.get("http://localhost:" + config.ticketPort + "/ticket/" + req.body.ticketId)
     .then(postTicket.bind(null, req))
     .catch((err) => {
-      if (err) throw err;
+      if (err) {
+        res.status(403).send("Could not get ticket");
+        throw err;
+      }
     });
   res.send("new order created");
 });
@@ -58,14 +64,14 @@ function payTicket(document, res, userData, ticket) {
     axios.patch("http://localhost:" + config.ticketPort + "/ticket/" + document.ticketId)
     .catch((err) => {
       if (err) {
-        res.sendStatus(404);
+        res.status(403).send("Could not patch ticket");
         throw err;
       }
     });
-    axios.patch("http://localhost:" + config.userPort + "/user/" + document.userId)
+    axios.patch("http://localhost:" + config.userPort + "/user/" + document.userId, {price: ticket.data.price})
     .catch((err) => {
       if (err) {
-        res.sendStatus(404);
+        res.status(403).send("Could not patch user");
         throw err;
       }
     });
@@ -82,12 +88,12 @@ function getUser(document, res, user) {
       .then(payTicket.bind(null, document, res, user.data))
       .catch(err => {
         if (err) {
-          res.sendStatus(404);
+          res.status(403).send("Could not get ticket");
           throw err;
         }
       });
   } else {
-    res.sendStatus(404)
+    res.status(403).send("Could not get user");
   }
 }
 
@@ -98,16 +104,16 @@ app.patch("/order/:id", (req, res) => {
         .then(getUser.bind(null, document, res))
         .catch((err) => {
           if (err) {
-            res.sendStatus(404);
+            res.status(403).send("Could not get user");
             throw err;
           }
         });
     } else {
-      res.sendStatus(404);
+      res.status(403).send("Could not get order");
     }
   }).catch((err) => {
     if (err) {
-      res.sendStatus(404);
+      res.status(403).send("Could not get order");
       throw err;
     }
   });
@@ -121,7 +127,7 @@ app.get("/orders", (req, res) => {
     })
     .catch((err) => {
       if (err) {
-        res.sendStatus(404);
+        res.status(403).send("Could not get orders");
         throw err;
       }
     });
@@ -132,20 +138,21 @@ app.get("/order/:id", (req, res) => {
     .then((order) => {
       if (order) {
         axios.get("http://localhost:" + config.userPort + "/user/" + order.userId).then((response) => {
-          var orderObject = { userId: order.userId, userName: response.data.name, userWallet: response.data.wallet, ticketId: order.ticketId, ticketName: "", ticketPrice: "", paid: order.paid }
+          var orderObject = { userId: order.userId, userName: response.data.name, userWallet: response.data.wallet, ticketId: order.ticketId, ticketName: "", ticketPrice: "", ticketStock: "", paid: order.paid }
           axios.get("http://localhost:" + config.ticketPort + "/ticket/" + order.ticketId).then((response) => {
             orderObject.ticketName = response.data.name
             orderObject.ticketPrice = response.data.price
+            orderObject.ticketStock = response.data.ticketStock
             res.json(orderObject);
           })
         })
       } else {
-        res.sendStatus(404);
+        res.status(403).send("Could not get order");
       }
     })
     .catch((err) => {
       if (err) {
-        res.sendStatus(404);
+        res.status(403).send("Could not get order");
         throw err;
       }
     });
@@ -157,7 +164,10 @@ app.delete("/order/:id", (req, res) => {
       res.send("Order deleted");
     })
     .catch((err) => {
-      if (err) throw err;
+      if (err) {
+        res.status(403).send("Could not delete order");
+        throw err;
+      }
     });
 });
 
