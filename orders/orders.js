@@ -131,10 +131,14 @@ app.get("/order/:id", (req, res) => {
   Order.findById(req.params.id)
     .then((order) => {
       if (order) {
+        console.log("in order")
         axios.get("http://localhost:" + config.userPort + "/user/" + order.userId).then((response) => {
-          var orderObject = { userName: response.data.name, ticketName: "" }
+          console.log("in user request")
+          var orderObject = { userName: response.data.name, userWallet: response.data.name, ticketName: "", ticketPrice: "" }
           axios.get("http://localhost:" + config.ticketPort + "/ticket/" + order.ticketId).then((response) => {
+            console.log("in ticket")
             orderObject.ticketName = response.data.name
+            orderObject.ticketPrice = response.data.price
             res.json(orderObject);
           })
         })
