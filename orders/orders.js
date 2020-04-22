@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   res.send("main endpoint");
 });
 
-function postTicket(req, ticket) {
+function postTicket(req, res, ticket) {
   if (ticket.data.stock == 0) {
     res.status(403).send("No more ticket available");
   } else {
@@ -33,7 +33,9 @@ function postTicket(req, ticket) {
     var order = new Order(newOrder);
 
     order.save()
-      .then(() => { })
+      .then(() => {
+        res.send("new order created");
+      })
       .catch((err) => {
         if (err) {
           res.status(403).send("Could not save new order");
@@ -45,14 +47,13 @@ function postTicket(req, ticket) {
 
 app.post("/order", (req, res) => {
   axios.get("http://localhost:" + config.ticketPort + "/ticket/" + req.body.ticketId)
-    .then(postTicket.bind(null, req))
+    .then(postTicket.bind(null, req, res))
     .catch((err) => {
       if (err) {
         res.status(403).send("Could not get ticket");
         throw err;
       }
     });
-  res.send("new order created");
 });
 
 
