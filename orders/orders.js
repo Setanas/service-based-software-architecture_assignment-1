@@ -142,7 +142,7 @@ app.get("/order/:id", (req, res) => {
           axios.get("http://localhost:" + config.ticketPort + "/ticket/" + order.ticketId).then((response) => {
             orderObject.ticketName = response.data.name
             orderObject.ticketPrice = response.data.price
-            orderObject.ticketStock = response.data.ticketStock
+            orderObject.ticketStock = response.data.stock
             res.json(orderObject);
           })
         })
