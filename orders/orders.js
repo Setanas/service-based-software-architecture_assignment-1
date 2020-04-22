@@ -10,7 +10,7 @@ const Order = mongoose.model("Order");
 app.use(bodyParser.json());
 
 mongoose.connect(
-  "mongodb+srv://first_user:password1998@microservices-f5nmb.mongodb.net/orders?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true },
+  "mongodb+srv://MarcD:UDoYX5HUundpJXtm@cluster0-2cdlr.mongodb.net/test?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true },
   () => {
     console.log("db connected");
   }
@@ -132,10 +132,10 @@ app.get("/order/:id", (req, res) => {
   Order.findById(req.params.id)
     .then((order) => {
       if (order) {
-        axios.get("http://localhost:5555/user/" + order.userId).then((response) => {
+        axios.get("http://localhost:3333/user/" + order.userId).then((response) => {
           console.log()
           var orderObject = { userName: response.data.name, ticketName: "" }
-          axios.get("http://localhost:4545/ticket/" + order.ticketId).then((response) => {
+          axios.get("http://localhost:2222/ticket/" + order.ticketId).then((response) => {
             orderObject.ticketName = response.data.name
             res.json(orderObject);
           })

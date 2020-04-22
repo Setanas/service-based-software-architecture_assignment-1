@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 app.use(bodyParser.json())
 
 mongoose.connect(
-  "mongodb+srv://first_user:password1998@microservices-f5nmb.mongodb.net/users?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true },
+  "mongodb+srv://MarcD:UDoYX5HUundpJXtm@cluster0-2cdlr.mongodb.net/users?retryWrites=true&w=majority", { useNewUrlParser: true, useUnifiedTopology: true },
   () => {
     console.log("db connected");
   }
