@@ -1,6 +1,6 @@
 {
-    "userPort": "2222",
-    "ticketPort": "3333",
+    "userPort": "3333",
+    "ticketPort": "2222",
     "orderPort": "4444",
     "gatewayPort": "1111"
 }
