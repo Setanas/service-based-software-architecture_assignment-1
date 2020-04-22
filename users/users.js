@@ -67,6 +67,7 @@ app.get("/users", (req, res) => {
 
 app.patch("/user/:id", (req, res) => {
   User.findById(req.params.id).then((user) => {
+    console.log(req.body.price)
     if (user) {
       user.wallet -= req.body.price;
       user.save();
