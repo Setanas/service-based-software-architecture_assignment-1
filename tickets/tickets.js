@@ -65,7 +65,7 @@ app.get("/ticket/:id", (req, res) => {
 });
 
 app.delete("/ticket/:id", (req, res) => {
-  Ticket.findOneAndRemove(req.params.id)
+  Ticket.findByIdAndRemove(req.params.id)
     .then(() => {
       res.send("Ticket deleted");
     })

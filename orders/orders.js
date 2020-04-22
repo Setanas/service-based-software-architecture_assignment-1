@@ -151,7 +151,7 @@ app.get("/order/:id", (req, res) => {
 });
 
 app.delete("/order/:id", (req, res) => {
-  Order.findOneAndRemove(req.params.id)
+  Order.findByIdAndRemove(req.params.id)
     .then(() => {
       res.send("Order deleted");
     })

@@ -46,7 +46,7 @@ app.get("/user/:id", (req, res) => {
 });
 
 app.delete("/user/:id", (req, res) => {
-  User.findOneAndRemove(req.params.id)
+  User.findByIdAndRemove(req.params.id)
     .then(() => {
       res.send("User deleted");
     })
